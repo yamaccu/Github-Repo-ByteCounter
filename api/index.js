@@ -1,102 +1,46 @@
 export default function handler(req, res) {
-    const { name = 'World' } = req.query;
-//    return res.send(`Hello ${name}!`);
+  const { name = 'World' } = req.query;
+  //    return res.send(`Hello ${name}!`);
 
-      return res.send(`
+  return res.send(`
+      <svg xmlns="http://www.w3.org/2000/svg" width="495" height="195" viewBox="0 0 495 195" fill="none" role="img"
+      aria-labelledby="descId">
+      <title id="titleId">yamaccu's GitHub Stats, Rank: A+</title>
+      <desc id="descId">Total Stars Earned: 2, Total Commits in 2022 : 2, Total PRs: 0, Total Issues: 2, Contributed to: 0
+      </desc>
       <style>
-      .bar-graph-wrap {
-        position: relative;
-        height: 350px;
-        -webkit-box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-                box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-        overflow: hidden;
-      }
-      .bar-graph-wrap .graph {
-        height: 50px;
-        position: absolute;
-        left: 0;
-        border-radius: 0 4px 4px 0;
-        display: -webkit-box;
-        display: -ms-flexbox;
-        display: flex;
-        -webkit-box-align: center;
-            -ms-flex-align: center;
-                align-items: center;
-        -webkit-box-pack: justify;
-            -ms-flex-pack: justify;
-                justify-content: space-between;
-        padding: 10px;
-        -webkit-animation: graphAnim 0.5s forwards;
-                animation: graphAnim 0.5s forwards;
-      }
-      .bar-graph-wrap .graph span {
-        font-size: 14px;
-        color: #ffffff;
-      }
-      @media screen and (max-width: 750px) {
-        .bar-graph-wrap .graph span {
-          font-size: 12px;
-        }
-      }
-      .bar-graph-wrap .graph.blue {
-        top: 15%;
-        background: #03a9f4;
-        width: 88%;
-      }
-      .bar-graph-wrap .graph.red {
-        top: 0;
-        bottom: 0;
-        margin: auto;
-        background: #ff3051;
-        width: 65%;
-      }
-      .bar-graph-wrap .graph.green {
-        bottom: 15%;
-        background: #1fd26c;
-        width: 27%;
-      }
-      
-      @-webkit-keyframes graphAnim {
-        0% {
-          -webkit-transform: translateX(-100%);
-                  transform: translateX(-100%);
-        }
-        100% {
-          -webkit-transform: translateX(0);
-                  transform: translateX(0);
-        }
-      }
-      
-      @keyframes graphAnim {
-        0% {
-          -webkit-transform: translateX(-100%);
-                  transform: translateX(-100%);
-        }
-        100% {
-          -webkit-transform: translateX(0);
-                  transform: translateX(0);
-        }
-      }
-
-
+          .header {
+              font: 600 18px 'Segoe UI', Ubuntu, Sans-Serif;
+              fill: #2f80ed;
+          }
+          .lang-name {
+              font: 600 12px 'Segoe UI', Ubuntu, Sans-Serif;
+              fill: #434d58
+          }
+          .lang-bytes {
+              font: 600 12px 'Segoe UI', Ubuntu, Sans-Serif;
+              fill: #000000
+          }
       </style>
-      
-      <div id="bar-graph" class="content">
-        <h2 class="c-title">棒グラフ</h2>
-        <div class="bar-graph-wrap">
-          <div class="graph blue">
-            <span class="name">Graph 01</span>
-            <span class="number">88%</span>
-          </div>
-          <div class="graph red">
-            <span class="name">Graph 02</span>
-            <span class="number">65%</span>
-          </div>
-          <div class="graph green">
-            <span class="name">Graph 03</span>
-            <span class="number">27%</span>
-          </div>
-        </div>
-      </div>
-      `);
+      <rect x="0.5" y="0.5" rx="4.5" height="99%" stroke="#e4e2e2" width="494" fill="#fffefe" />
+      <svg x="25" width="445">
+          <g transform="translate(0, 60)">
+              <text x="2" y="-5" class="lang-name">1</text>
+              <rect height="14" fill="#e34c26" x="0" y="0" data-testid="lang-progress" width="100%" />
+          </g>
+          <g transform="translate(0, 95)">
+              <text x="2" y="-5" class="lang-name">2</text>
+              <rect height="14" fill="#e34c26" x="0" y="0" data-testid="lang-progress" width="80%" />
+          </g>
+          <g transform="translate(0, 130)">
+              <text x="2" y="-5" class="lang-name">3</text>
+              <rect height="14" fill="#e34c26" x="0" y="0" data-testid="lang-progress" width="40%" />
+          </g>
+          <g transform="translate(0, 165)">
+              <text x="2" y="-5" class="lang-name">4</text>
+              <rect height="14" fill="#e34c26" x="0" y="0" data-testid="lang-progress" width="5%" />
+          </g>
+      </svg>
+  </svg>
+       `);
 }
