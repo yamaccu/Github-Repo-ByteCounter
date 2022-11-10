@@ -2,6 +2,8 @@ import axios from "axios";
 
 export default async (req, res) => {
 
+  const token = process.env[`PAT_1`];
+
     return res.send(
         axios({
             url: "https://api.github.com/graphql",
@@ -26,8 +28,8 @@ export default async (req, res) => {
                 }
             `
             ,
-            Authorization: `token PAT_1`,
-        }).data
+            Authorization: `token ${token}`,
+        })
     );
 };
 
