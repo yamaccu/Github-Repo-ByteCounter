@@ -29,5 +29,7 @@ export default async (req, res) => {
         }
     });
 
-    return res.send(ret.data);
+    ret.then((r) => {console.log(r.data)})
+
+    return res.send(r.data);
 };
