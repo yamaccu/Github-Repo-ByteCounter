@@ -1,6 +1,38 @@
-export default function handler(req, res) {
-  const { name = 'World' } = req.query;
-  //    return res.send(`Hello ${name}!`);
+export default async (req, res) => {
+    const username = req.query;
+    res.setHeader("Content-Type", "image/svg+xml");
+
+    try {
+        const url = axios.post("https://api.github.com/graphql", `
+        query{
+            user(login:"yamaccu") {
+              repositories(first:100 ,isFork:false){
+                nodes{
+                  name
+                  languages(first:10) {
+                    edges {
+                      size
+                      node {
+                        name
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        `)
+
+        console.log(url);
+        return res.send(url);
+
+    } catch (err) {
+        res.setHeader("Cache-Control", `no-cache, no-store, must-revalidate`); // Don't cache error responses.
+        return res.send("error!!!");
+    }
+};
+
+/*
 
   return res.send(`
       <svg xmlns="http://www.w3.org/2000/svg" width="495" height="195" viewBox="0 0 495 195" fill="none" role="img"
@@ -44,3 +76,5 @@ export default function handler(req, res) {
   </svg>
        `);
 }
+
+*/
