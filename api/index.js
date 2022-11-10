@@ -28,7 +28,6 @@ export default async (req, res) => {
                 `,
         }
     })
-    .then(function(r){const ret = r})
+    .then(function(r){return res.send(r)})
 
-    return res.send(r.data);
 };
