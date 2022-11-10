@@ -2,35 +2,30 @@ import axios from "axios";
 
 export default async (req, res) => {
 
-  const token = process.env[`PAT_1`];
+  const accessToken = 'PAT_1'
 
-    return res.send(
-        axios({
-            url: "https://api.github.com/graphql",
-            method: "post",
-            query: `
-                query{
-                    user(login:"yamaccu") {
-                        repositories(first:100 ,isFork:false){
-                            nodes{
-                                name
-                                languages(first:10) {
-                                    edges {
-                                        size
-                                        node {
-                                            name
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            `
-            ,
-            Authorization: `token ${token}`,
-        })
-    );
+  return res.send(
+
+    axios({
+      url: 'https://api.github.com/graphql',
+      headers: {
+        Authorization: `bearer ${accessToken}`,
+      },
+      method: 'POST',
+      data: {
+        query: `query { 
+             repository(owner: "vuejs", name: "vue") { 
+              name,
+              description,
+              license
+            }
+          }`
+      }
+    })
+
+
+
+  );
 };
 
 
