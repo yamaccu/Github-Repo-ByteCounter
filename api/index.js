@@ -2,7 +2,7 @@ import axios from "axios";
 
 export default async (req, res) => {
 
-    const ret = axios({
+    axios({
         url: "https://api.github.com/graphql",
         method: "post",
         data: {
@@ -27,9 +27,8 @@ export default async (req, res) => {
                 }
                 `,
         }
-    });
-
-    ret.then((r) => {console.log(r.data)})
+    })
+    .then(function(r){const ret = r})
 
     return res.send(r.data);
 };
