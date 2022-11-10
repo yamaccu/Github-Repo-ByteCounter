@@ -4,10 +4,9 @@ export default async (req, res) => {
 
     return res.send(
         axios({
-                url: "https://api.github.com/graphql",
-                method: "post",
-                data: {
-                    query: `
+            url: "https://api.github.com/graphql",
+            method: "post",
+            query: `
                 query{
                     user(login:"yamaccu") {
                         repositories(first:100 ,isFork:false){
@@ -25,9 +24,9 @@ export default async (req, res) => {
                         }
                     }
                 }
-                `
-                },
-                Authorization: `bearer PAT_1`
+            `
+            ,
+            Authorization: `token PAT_1`,
         })
     );
 };
