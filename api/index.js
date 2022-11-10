@@ -2,11 +2,10 @@ import axios from "axios";
 
 export default async (req, res) => {
 
-    return res.send(
-        axios({
-            url: "https://api.github.com/graphql",
-            method: "post",
-            query: `
+    axios({
+        url: "https://api.github.com/graphql",
+        method: "post",
+        query: `
                 query{
                     user(login:"yamaccu") {
                         repositories(first:100 ,isFork:false){
@@ -25,10 +24,15 @@ export default async (req, res) => {
                     }
                 }
             `
-            ,
-            Authorization: `token PAT_1`,
-        })
-    );
+        ,
+        Authorization: `token PAT_1`,
+    })
+        .then(function (response) {
+            console.log(response.data);
+        }
+        );
+
+    return res.send("test");
 };
 
 
