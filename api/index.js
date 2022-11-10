@@ -2,26 +2,29 @@ export default async (req, res) => {
     const username = req.query;
     res.setHeader("Content-Type", "image/svg+xml");
 
-    try {
-        const url = axios.post("https://api.github.com/graphql", `
-        query{
-            user(login:"yamaccu") {
-              repositories(first:100 ,isFork:false){
-                nodes{
-                  name
-                  languages(first:10) {
-                    edges {
-                      size
-                      node {
-                        name
-                      }
-                    }
+    query = `
+    query{
+        user(login:"yamaccu") {
+          repositories(first:100 ,isFork:false){
+            nodes{
+              name
+              languages(first:10) {
+                edges {
+                  size
+                  node {
+                    name
                   }
                 }
               }
             }
           }
-        `)
+        }
+      }
+    `;
+    console.log(query);
+    res.send(query)
+    try {
+        const url = axios.post("https://api.github.com/graphql",query);
 
         console.log(url);
         return res.send(url);
