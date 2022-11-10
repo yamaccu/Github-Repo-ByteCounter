@@ -1,10 +1,12 @@
 import axios from "axios";
 
 export default async (req, res) => {
-  return res.send(retryer);
+  return res.send(
+    retryer
+    );
 };
 
-const retryer = async (variables, retries = 0) => {
+const retryer = async (variables = { login: "yamaccu" }, retries = 0) => {
   try {
     // try to fetch with the first token since RETRIES is 0 index i'm adding +1
     let response = await fetcher(
