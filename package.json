@@ -1,0 +1,9 @@
+{
+    "name": "github-repo-bytecounter",
+    "devDependencies": {
+      "axios-mock-adapter": "^1.18.1"
+    },
+    "dependencies": {
+      "axios": "^0.24.0"
+    }
+  }
