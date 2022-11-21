@@ -187,11 +187,6 @@ const requestGraphQL = async (variables, endCursor, previousData) => {
     return resData;
   }
 
-  if(endCursor == previousData.data.data.user.repositories.pageInfo.endCursor)
-  {
-    return resData;
-  }
-
   resData = [...previousData, ...resData.data.data.user.repositories.nodes]
 
   return requestGraphQL(variables, endCursor, resData);
