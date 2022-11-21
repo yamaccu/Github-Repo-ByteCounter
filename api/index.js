@@ -139,14 +139,18 @@ async function fetchTopLanguages(resGraphQL, exclude_repo = []) {
   return topLangs;
 }
 
-const requestGraphQL = async (variables) => {
+const requestGraphQL = async (variables, endCursor, previousData) => {
   const token = process.env[`PAT_1`];
-  const data =
+  const query =
   {
     query: `
       query userInfo($login: String!) {
         user(login: $login) {
-          repositories(ownerAffiliations: OWNER, isFork: false, first: 100) {
+          repositories(ownerAffiliations: OWNER, isFork: false, first: 100, ${endCursor ? `after: "${endCursor}"` : ''}) {
+            pageInfo{
+              hasNextPage
+              endCursor
+            }
             nodes {
               name
               languages(first: 10, orderBy: {field: SIZE, direction: DESC}) {
@@ -169,12 +173,29 @@ const requestGraphQL = async (variables) => {
     Authorization: `token ${token}`,
   };
 
-  return axios({
+  let resData = axios({
     url: "https://api.github.com/graphql",
     method: "post",
     headers,
-    data,
+    query,
   });
+
+  const hasNextPage = resData.data.data.user.repositories.pageInfo.hasNextPage;
+  endCursor = resData.data.data.user.repositories.pageInfo.endCursor;
+
+  if(!hasNextPage)
+  {
+    return resData;
+  }
+  if(endCursor == previousData.data.data.user.repositories.pageInfo.endCursor)
+  {
+    return resData;
+  }
+
+  resData = [...previousData, ...resData.data.data.user.repositories.nodes]
+
+  return requestGraphQL(variables, endCursor, resData);
+  //return resData
 };
 
 function calculateColor(size){
