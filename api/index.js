@@ -30,6 +30,7 @@ export default async (req, res) => {
     res.setHeader("Cache-Control", `public, max-age=86400`);
 
     return res.send(`
+    <text>${resGraphQL}</text>
     <svg xmlns="http://www.w3.org/2000/svg" width="495" height="195" viewBox="0 0 495 195" fill="none" role="img"
     aria-labelledby="descId">
     <title id="titleId">bytes Programmed</title>
@@ -181,7 +182,7 @@ const requestGraphQL = async (variables, endCursor, previousData) => {
   });
 
   //const hasNextPage = resData.data.user.repositories.pageInfo.hasNextPage;
-  endCursor = resData.data.user.repositories.pageInfo.endCursor;
+  //endCursor = resData.data.user.repositories.pageInfo.endCursor;
   /*
   if(!hasNextPage)
   {
