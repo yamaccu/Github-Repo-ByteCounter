@@ -180,8 +180,8 @@ const requestGraphQL = async (variables, endCursor, previousData) => {
     query,
   });
 
-  const hasNextPage = resData.data.data.user.repositories.pageInfo.hasNextPage;
-  endCursor = resData.data.data.user.repositories.pageInfo.endCursor;
+  //const hasNextPage = resData.data.user.repositories.pageInfo.hasNextPage;
+  endCursor = resData.data.user.repositories.pageInfo.endCursor;
   /*
   if(!hasNextPage)
   {
