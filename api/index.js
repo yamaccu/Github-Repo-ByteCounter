@@ -13,6 +13,7 @@ export default async (req, res) => {
     if (!username) throw new Error (`username not found`);
 
     const resGraphQL = await requestGraphQL({ login: username });
+   /* 
     const topLangs = await fetchTopLanguages(
       resGraphQL,
       parseArray(exclude),
@@ -25,7 +26,7 @@ export default async (req, res) => {
       rankColor[i] = calculateColor(topLangs[Object.keys(topLangs)[i]].size);
       graphLength[i] = 100 / topLangs[Object.keys(topLangs)[0]].size * topLangs[Object.keys(topLangs)[i]].size;
     }
-
+*/
     res.setHeader("Content-Type", "image/svg+xml");
     res.setHeader("Cache-Control", `public, max-age=86400`);
 
