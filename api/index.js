@@ -182,15 +182,16 @@ const requestGraphQL = async (variables, endCursor, previousData) => {
 
   const hasNextPage = resData.data.data.user.repositories.pageInfo.hasNextPage;
   endCursor = resData.data.data.user.repositories.pageInfo.endCursor;
+  /*
   if(!hasNextPage)
   {
     return resData;
-  }
+  }*/
 
-  resData = [...previousData, ...resData.data.data.user.repositories.nodes]
+  //resData = [...previousData, ...resData.data.data.user.repositories.nodes]
 
-  return requestGraphQL(variables, endCursor, resData);
-  //return resData
+  //return requestGraphQL(variables, endCursor, resData);
+  return resData
 };
 
 function calculateColor(size){
