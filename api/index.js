@@ -13,7 +13,6 @@ export default async (req, res) => {
     if (!username) throw new Error (`username not found`);
 
     const resGraphQL = await requestGraphQL({ login: username });
-   /* 
     const topLangs = await fetchTopLanguages(
       resGraphQL,
       parseArray(exclude),
@@ -26,12 +25,11 @@ export default async (req, res) => {
       rankColor[i] = calculateColor(topLangs[Object.keys(topLangs)[i]].size);
       graphLength[i] = 100 / topLangs[Object.keys(topLangs)[0]].size * topLangs[Object.keys(topLangs)[i]].size;
     }
-*/
+
     res.setHeader("Content-Type", "image/svg+xml");
     res.setHeader("Cache-Control", `public, max-age=86400`);
 
     return res.send(`
-    <text>${resGraphQL}</text>
     <svg xmlns="http://www.w3.org/2000/svg" width="495" height="195" viewBox="0 0 495 195" fill="none" role="img"
     aria-labelledby="descId">
     <title id="titleId">bytes Programmed</title>
@@ -146,7 +144,7 @@ const requestGraphQL = async (variables, endCursor, previousData) => {
   const query =
   {
     query: `
-      query userInfo($login: String!) {
+      query userInfo($login: String!, $endCursor: String!) {
         user(login: $login) {
           repositories(ownerAffiliations: OWNER, isFork: false, first: 100, ${endCursor ? `after: "${endCursor}"` : ''}) {
             pageInfo{
