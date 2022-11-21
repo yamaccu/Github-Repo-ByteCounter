@@ -180,19 +180,19 @@ const requestGraphQL = async (variables, endCursor, previousData) => {
     query,
   });
 
-  const hasNextPage = resData.data.user.repositories.pageInfo.hasNextPage;
-  endCursor = resData.data.user.repositories.pageInfo.endCursor;
-
+  const hasNextPage = resData.data.data.user.repositories.pageInfo.hasNextPage;
+  endCursor = resData.data.data.user.repositories.pageInfo.endCursor;
   if(!hasNextPage)
   {
     return resData;
   }
-  if(endCursor == previousData.data.user.repositories.pageInfo.endCursor)
+
+  if(endCursor == previousData.data.data.user.repositories.pageInfo.endCursor)
   {
     return resData;
   }
 
-  resData = [...previousData, ...resData.data.user.repositories.nodes]
+  resData = [...previousData, ...resData.data.data.user.repositories.nodes]
 
   return requestGraphQL(variables, endCursor, resData);
   //return resData
