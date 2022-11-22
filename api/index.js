@@ -89,6 +89,7 @@ export default async (req, res) => {
 };
 
 async function fetchTopLanguages(resGraphQL, exclude_repo = []) {
+  let repoNodes;
   for(let i = 0; i < resGraphQL.length; i++)
   {
     repoNodes = [...repoNodes, ...resGraphQL[i].data.user.repositories.nodes];
