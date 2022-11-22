@@ -91,16 +91,6 @@ export default async (req, res) => {
   }
 };
 
-async function fetchRepoNodes(resGraphQL) {
-  let ret;
-  for(let i = 0; i < resGraphQL.length; i++)
-  {
-    ret = [ret, ...resGraphQL[i].data.user.repositories.nodes];
-  }
-  return ret;
-}
-
-
 async function fetchTopLanguages(resGraphQL, exclude_repo = []) {
   for(let i = 0; i < resGraphQL.length; i++)
   {
@@ -196,8 +186,6 @@ const requestGraphQL = async (variables, endCursor, previousData) => {
     data,
   });
 
-  //return resData;
-
   const hasNextPage = resData.data.data.user.repositories.pageInfo.hasNextPage;
   endCursor = resData.data.data.user.repositories.pageInfo.endCursor;
 
@@ -205,6 +193,8 @@ const requestGraphQL = async (variables, endCursor, previousData) => {
   {
     return resData.data;
   }
+
+  return resData;
 
   resData = [...previousData, ...resData.data]
 
