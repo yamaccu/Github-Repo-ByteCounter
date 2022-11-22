@@ -138,7 +138,7 @@ async function fetchTopLanguages(repoNodes, exclude_repo = []) {
   return topLangs;
 }
 
-const requestGraphQL = async (variables, endCursor, previousData = []) => {
+async function requestGraphQL(variables, endCursor, previousData = []){
   const token = process.env[`PAT_1`];
   const data =
   {
@@ -181,7 +181,7 @@ const requestGraphQL = async (variables, endCursor, previousData = []) => {
 
   const hasNextPage = resData.data.data.user.repositories.pageInfo.hasNextPage;
   endCursor = resData.data.data.user.repositories.pageInfo.endCursor;
-  resData = [...previousData, ...data.data.user.repositories.nodes]
+  resData = [...previousData, ...resData.data.data.user.repositories.nodes]
 
   if(!hasNextPage)
   {

@@ -1,12 +1,12 @@
 import axios from "axios";
 
 const resGraphQL = await requestGraphQL({ login: "karaage0703" });
-console.log(resGraphQL);
+//console.log(resGraphQL);
 
 const topLangs = await fetchTopLanguages(resGraphQL);
 console.log(topLangs);
 
-async function requestGraphQL(variables, endCursor, previousData){
+async function requestGraphQL(variables, endCursor, previousData = []){
   const token = `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`;
   const data =
   {
@@ -49,15 +49,16 @@ async function requestGraphQL(variables, endCursor, previousData){
 
   const hasNextPage = resData.data.data.user.repositories.pageInfo.hasNextPage;
   endCursor = resData.data.data.user.repositories.pageInfo.endCursor;
+  resData = [...previousData, ...resData.data.data.user.repositories.nodes]
 
   if(!hasNextPage)
   {
-    return resData.data.data.user.repositories.nodes;
+    console.log(resData);
+    return resData;
   }
 
-  resData = [previousData, ...resData.data.data.user.repositories.nodes]
 
-  return requestGraphQL(variables, endCursor, resData.data);
+  return requestGraphQL(variables, endCursor, resData);
   //return resData;
 };
 
@@ -65,7 +66,7 @@ async function requestGraphQL(variables, endCursor, previousData){
 async function fetchTopLanguages(repoNodes, exclude_repo = []) {
   let repoToHide = {};
 
-  console.log(repoNodes);
+  //console.log(repoNodes);
 
   // populate repoToHide map for quick lookup
   // while filtering out
