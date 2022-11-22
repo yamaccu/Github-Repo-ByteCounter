@@ -14,11 +14,8 @@ export default async (req, res) => {
 
     const resGraphQL = await requestGraphQL({ login: username });
 
-    if(resGraphQL.data.data.errors)
-    {
-      throw new Error(resGraphQL);
-    }
-
+    throw new Error(resGraphQL);
+    
     const topLangs = await fetchTopLanguages(
       resGraphQL,
       parseArray(exclude),
@@ -186,11 +183,6 @@ const requestGraphQL = async (variables, endCursor, previousData) => {
     headers,
     query,
   });
-
-  if(resData.data.data.errors)
-  {
-    return resData;
-  }
 
   //const hasNextPage = resData.data.data.user.repositories.pageInfo.hasNextPage;
   //endCursor = resData.data.data.user.repositories.pageInfo.endCursor;
