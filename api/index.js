@@ -18,8 +18,6 @@ export default async (req, res) => {
       parseArray(exclude),
     );
 
-    throw new Error(JSON.stringify(topLangs));
-
     let rankColor = [];
     let graphLength = [];
     for(let i = 0; i < 4; i++)
@@ -90,12 +88,7 @@ export default async (req, res) => {
   }
 };
 
-async function fetchTopLanguages(resGraphQL, exclude_repo = []) {
-  let repoNodes;
-  for(let i = 0; i < resGraphQL.length; i++)
-  {
-    repoNodes = [...repoNodes, ...resGraphQL[i].data.user.repositories.nodes];
-  }
+async function fetchTopLanguages(repoNodes, exclude_repo = []) {
   let repoToHide = {};
 
   // populate repoToHide map for quick lookup
@@ -105,8 +98,6 @@ async function fetchTopLanguages(resGraphQL, exclude_repo = []) {
       repoToHide[repoName] = true;
     });
   }
-
-  return repoNodes;
 
   // filter out repositories to be hidden
   repoNodes = repoNodes
@@ -193,12 +184,12 @@ const requestGraphQL = async (variables, endCursor, previousData) => {
 
   if(!hasNextPage)
   {
-    return resData.data;
+    return resData.data.data.user.repositories.nodes;
   }
 
-  resData = [...previousData, ...resData.data]
+  resData = [...previousData, ...data.data.user.repositories.nodes]
 
-  return requestGraphQL(variables, endCursor, resData.data);
+  return requestGraphQL(variables, endCursor, resData);
   //return resData;
 };
 
