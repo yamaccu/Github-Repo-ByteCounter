@@ -18,7 +18,7 @@ export default async (req, res) => {
       parseArray(exclude),
     );
 
-    throw new Error(JSON.stringify(repoNodes));
+    throw new Error(JSON.stringify(topLangs));
 
     let rankColor = [];
     let graphLength = [];
