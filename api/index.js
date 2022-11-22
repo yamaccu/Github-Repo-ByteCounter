@@ -13,9 +13,6 @@ export default async (req, res) => {
     if (!username) throw new Error (`username not found`);
 
     const resGraphQL = await requestGraphQL({ login: username });
-
-    throw new Error(JSON.stringify(resGraphQL.data));
-
     const topLangs = await fetchTopLanguages(
       resGraphQL,
       parseArray(exclude),
@@ -179,7 +176,7 @@ const requestGraphQL = async (variables, endCursor, previousData) => {
     Authorization: `token ${token}`,
   };
 
-  let resData = axios({
+  let resData = await axios({
     url: "https://api.github.com/graphql",
     method: "post",
     headers,
@@ -193,8 +190,6 @@ const requestGraphQL = async (variables, endCursor, previousData) => {
   {
     return resData.data;
   }
-
-  return resData;
 
   resData = [...previousData, ...resData.data]
 
