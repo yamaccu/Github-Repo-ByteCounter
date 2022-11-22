@@ -88,8 +88,21 @@ export default async (req, res) => {
   }
 };
 
+async function fetchRepoNodes(resGraphQL) {
+  let ret;
+  for(let i = 0; i < resGraphQL.length; i++)
+  {
+    ret = [ret, ...resGraphQL[i].data.user.repositories.nodes];
+  }
+  return ret;
+}
+
+
 async function fetchTopLanguages(resGraphQL, exclude_repo = []) {
-  let repoNodes = resGraphQL.data.data.user.repositories.nodes;
+  for(let i = 0; i < resGraphQL.length; i++)
+  {
+    repoNodes = [...repoNodes, ...resGraphQL[i].data.user.repositories.nodes];
+  }
   let repoToHide = {};
 
   // populate repoToHide map for quick lookup
@@ -139,14 +152,14 @@ async function fetchTopLanguages(resGraphQL, exclude_repo = []) {
   return topLangs;
 }
 
-const requestGraphQL = async (variables) => {
+const requestGraphQL = async (variables, endCursor, previousData) => {
   const token = process.env[`PAT_1`];
   const data =
   {
     query: `
       query userInfo($login: String!) {
         user(login: $login) {
-          repositories(ownerAffiliations: OWNER, isFork: false, first: 100) {
+          repositories(ownerAffiliations: OWNER, isFork: false, first: 100, ${endCursor ? `after: "${endCursor}"` : ''}) {
             pageInfo{
               hasNextPage
               endCursor
@@ -173,14 +186,25 @@ const requestGraphQL = async (variables) => {
     Authorization: `token ${token}`,
   };
 
-  let res = axios({
+  let resData = axios({
     url: "https://api.github.com/graphql",
     method: "post",
     headers,
     data,
   });
 
-  return res;
+  const hasNextPage = resData.data.data.user.repositories.pageInfo.hasNextPage;
+  endCursor = resData.data.data.user.repositories.pageInfo.endCursor;
+
+  if(!hasNextPage)
+  {
+    return resData.data;
+  }
+
+  resData = [...previousData, ...resData.data]
+
+  return requestGraphQL(variables, endCursor, resData.data);
+  //return resData;
 };
 
 function calculateColor(size){
