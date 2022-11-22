@@ -146,7 +146,7 @@ const requestGraphQL = async (variables) => {
     query: `
       query userInfo($login: String!) {
         user(login: $login) {
-          repositories(ownerAffiliations: OWNER, isFork: false, first: 100, ${endCursor ? `after: "${endCursor}"` : ''}) {
+          repositories(ownerAffiliations: OWNER, isFork: false, first: 100) {
             pageInfo{
               hasNextPage
               endCursor
@@ -173,12 +173,14 @@ const requestGraphQL = async (variables) => {
     Authorization: `token ${token}`,
   };
 
-  return axios({
+  let res = axios({
     url: "https://api.github.com/graphql",
     method: "post",
     headers,
     data,
   });
+
+  return res;
 };
 
 function calculateColor(size){
