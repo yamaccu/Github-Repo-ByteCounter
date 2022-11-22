@@ -13,6 +13,12 @@ export default async (req, res) => {
     if (!username) throw new Error (`username not found`);
 
     const resGraphQL = await requestGraphQL({ login: username });
+
+    if(resGraphQL.data.error)
+    {
+      throw new Error(resGraphQL);
+    }
+
     const topLangs = await fetchTopLanguages(
       resGraphQL,
       parseArray(exclude),
@@ -141,6 +147,7 @@ async function fetchTopLanguages(resGraphQL, exclude_repo = []) {
 
 const requestGraphQL = async (variables, endCursor, previousData) => {
   const token = process.env[`PAT_1`];
+  variables = variables + 
   const query =
   {
     query: `
@@ -180,8 +187,13 @@ const requestGraphQL = async (variables, endCursor, previousData) => {
     query,
   });
 
-  //const hasNextPage = resData.data.user.repositories.pageInfo.hasNextPage;
-  //endCursor = resData.data.user.repositories.pageInfo.endCursor;
+  if(resData.data.errors)
+  {
+    return resData;
+  }
+
+  //const hasNextPage = resData.data.data.user.repositories.pageInfo.hasNextPage;
+  //endCursor = resData.data.data.user.repositories.pageInfo.endCursor;
   /*
   if(!hasNextPage)
   {
