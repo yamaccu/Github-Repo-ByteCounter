@@ -14,7 +14,7 @@ export default async (req, res) => {
 
     const resGraphQL = await requestGraphQL({ login: username });
 
-    if(resGraphQL.data.error)
+    if(resGraphQL.data.data.errors)
     {
       throw new Error(resGraphQL);
     }
@@ -187,7 +187,7 @@ const requestGraphQL = async (variables, endCursor, previousData) => {
     query,
   });
 
-  if(resData.data.errors)
+  if(resData.data.data.errors)
   {
     return resData;
   }
