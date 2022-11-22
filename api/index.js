@@ -13,9 +13,6 @@ export default async (req, res) => {
     if (!username) throw new Error (`username not found`);
 
     const resGraphQL = await requestGraphQL({ login: username });
-
-    throw new Error(JSON.stringify(resGraphQL));
-    
     const topLangs = await fetchTopLanguages(
       resGraphQL,
       parseArray(exclude),
@@ -142,13 +139,12 @@ async function fetchTopLanguages(resGraphQL, exclude_repo = []) {
   return topLangs;
 }
 
-const requestGraphQL = async (variables, endCursor, previousData) => {
+const requestGraphQL = async (variables) => {
   const token = process.env[`PAT_1`];
-  //variables = variables + 
-  const query =
+  const data =
   {
     query: `
-      query userInfo($login: String!, $endCursor: String!) {
+      query userInfo($login: String!) {
         user(login: $login) {
           repositories(ownerAffiliations: OWNER, isFork: false, first: 100, ${endCursor ? `after: "${endCursor}"` : ''}) {
             pageInfo{
@@ -177,25 +173,12 @@ const requestGraphQL = async (variables, endCursor, previousData) => {
     Authorization: `token ${token}`,
   };
 
-  let resData = axios({
+  return axios({
     url: "https://api.github.com/graphql",
     method: "post",
     headers,
-    query,
+    data,
   });
-
-  //const hasNextPage = resData.data.data.user.repositories.pageInfo.hasNextPage;
-  //endCursor = resData.data.data.user.repositories.pageInfo.endCursor;
-  /*
-  if(!hasNextPage)
-  {
-    return resData;
-  }*/
-
-  //resData = [...previousData, ...resData.data.data.user.repositories.nodes]
-
-  //return requestGraphQL(variables, endCursor, resData);
-  return resData
 };
 
 function calculateColor(size){
