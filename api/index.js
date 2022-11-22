@@ -189,7 +189,7 @@ const requestGraphQL = async (variables, endCursor, previousData) => {
 
   resData = [previousData, ...data.data.user.repositories.nodes]
 
-  return requestGraphQL(variables, endCursor, resData);
+  return requestGraphQL(variables, endCursor, resData.data);
   //return resData;
 };
 
