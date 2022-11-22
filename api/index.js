@@ -14,7 +14,7 @@ export default async (req, res) => {
 
     const resGraphQL = await requestGraphQL({ login: username });
 
-    throw new Error(resGraphQL);
+    throw new Error(resGraphQL.toString());
     
     const topLangs = await fetchTopLanguages(
       resGraphQL,
