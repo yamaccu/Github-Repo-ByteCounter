@@ -147,7 +147,7 @@ async function fetchTopLanguages(resGraphQL, exclude_repo = []) {
 
 const requestGraphQL = async (variables, endCursor, previousData) => {
   const token = process.env[`PAT_1`];
-  variables = variables + 
+  //variables = variables + 
   const query =
   {
     query: `
