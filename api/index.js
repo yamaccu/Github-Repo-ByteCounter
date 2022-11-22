@@ -18,6 +18,8 @@ export default async (req, res) => {
       parseArray(exclude),
     );
 
+    throw new Error(JSON.stringify(repoNodes));
+
     let rankColor = [];
     let graphLength = [];
     for(let i = 0; i < 4; i++)
@@ -103,6 +105,8 @@ async function fetchTopLanguages(resGraphQL, exclude_repo = []) {
       repoToHide[repoName] = true;
     });
   }
+
+  return repoNodes;
 
   // filter out repositories to be hidden
   repoNodes = repoNodes
