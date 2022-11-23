@@ -1,6 +1,4 @@
-## github repositories bytes counter  
-
-githubアカウント内のrepositoryの使用言語ごとのbyte数を集計して表示します。  
+githubアカウント内のrepositoryの、使用言語ごとのbyte数を集計して表示します。  
 forkしたレポジトリは除いています。  
 
 ## 使い方
@@ -29,10 +27,10 @@ byte数によって色分けされ、byte数が多い方が濃い色になりま
 対象外としたいレポジトリは、下記のように"exclude"で指定できます。  
 
 ```
-![bytes](https://github-repo-bytecounter.vercel.app/api?username=yamaccu&exclude=yamaccu.github.io)
+![bytes](https://github-repo-bytecounter.vercel.app/api?username=yamaccu&exclude=yamaccu.github.io,Blazor-CharjsTest)
 ```
 
-![bytes](https://github-repo-bytecounter.vercel.app/api?username=yamaccu&exclude=yamaccu.github.io
+![bytes](https://github-repo-bytecounter.vercel.app/api?username=yamaccu&exclude=yamaccu.github.io,Blazor-CharjsTest
 )
 
 ## 謝辞
