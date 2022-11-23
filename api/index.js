@@ -13,7 +13,7 @@ export default async (req, res) => {
     if (!username) throw new Error (`username not found`);
 
     const resGraphQL = await requestGraphQL({ login: username });
-    const topLangs = await fetchTopLanguages(
+    const topLangs = fetchTopLanguages(
       resGraphQL,
       parseArray(exclude),
     );
@@ -88,34 +88,30 @@ export default async (req, res) => {
   }
 };
 
-async function fetchTopLanguages(resGraphQL, exclude_repo = []) {
-  let repoNodes = resGraphQL.data.data.user.repositories.nodes;
+function fetchTopLanguages(resGraphQL, exclude_repo = []) {
+  let repoNodes = [];
+  for(let i = 0; i < resGraphQL.length; i++)
+  {
+    repoNodes = [...repoNodes, ...resGraphQL[i].data.user.repositories.nodes];
+  }  
   let repoToHide = {};
 
-  // populate repoToHide map for quick lookup
-  // while filtering out
   if (exclude_repo) {
     exclude_repo.forEach((repoName) => {
       repoToHide[repoName] = true;
     });
   }
 
-  // filter out repositories to be hidden
   repoNodes = repoNodes
     .sort((a, b) => b.size - a.size)
     .filter((name) => !repoToHide[name.name]);
 
   repoNodes = repoNodes
     .filter((node) => node.languages.edges.length > 0)
-    // flatten the list of language nodes
     .reduce((acc, curr) => curr.languages.edges.concat(acc), [])
     .reduce((acc, prev) => {
-      // get the size of the language (bytes)
       let langSize = prev.size;
 
-      // if we already have the language in the accumulator
-      // & the current language name is same as previous name
-      // add the size to the language size.
       if (acc[prev.node.name] && prev.node.name === acc[prev.node.name].name) {
         langSize = prev.size + acc[prev.node.name].size;
       }
@@ -139,48 +135,62 @@ async function fetchTopLanguages(resGraphQL, exclude_repo = []) {
   return topLangs;
 }
 
-const requestGraphQL = async (variables) => {
+async function requestGraphQL(variables) {
+  let hasNextPage = true;
+  let endCursor;
+  let resData = [];
   const token = process.env[`PAT_1`];
-  const data =
+  const headers =
   {
-    query: `
-      query userInfo($login: String!) {
-        user(login: $login) {
-          repositories(ownerAffiliations: OWNER, isFork: false, first: 100) {
-            pageInfo{
-              hasNextPage
-              endCursor
-            }
-            nodes {
-              name
-              languages(first: 10, orderBy: {field: SIZE, direction: DESC}) {
-                edges {
-                  size
-                  node {
-                    name
+    Authorization: `token ${token}`,
+  };
+
+  let i = 0;
+  while (hasNextPage) {
+    let data =
+    {
+      query: `
+        query userInfo($login: String!) {
+          user(login: $login) {
+            repositories(ownerAffiliations: OWNER, isFork: false, first: 100, ${endCursor ? `after: "${endCursor}"` : ''}) {
+              pageInfo{
+                hasNextPage
+                endCursor
+              }
+              nodes {
+                name
+                languages(first: 10, orderBy: {field: SIZE, direction: DESC}) {
+                  edges {
+                    size
+                    node {
+                      color
+                      name
+                    }
                   }
                 }
               }
             }
           }
         }
-      }
-      `,
-    variables,
-  };
-  const headers =
-  {
-    Authorization: `token ${token}`,
-  };
+        `,
+      variables,
+    };
+  
+    let res = await axios({
+      url: "https://api.github.com/graphql",
+      method: "post",
+      headers,
+      data,
+    });
 
-  let res = axios({
-    url: "https://api.github.com/graphql",
-    method: "post",
-    headers,
-    data,
-  });
+    hasNextPage = res.data.data.user.repositories.pageInfo.hasNextPage;
+    endCursor = res.data.data.user.repositories.pageInfo.endCursor;
 
-  return res;
+    resData[i] = res.data;
+    i++;
+  }
+
+  return resData;
 };
 
 function calculateColor(size){
