@@ -4,7 +4,7 @@ export async function requestGraphQL(variables) {
     let hasNextPage = true;
     let endCursor;
     let resData = [];
-    const token = `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`;
+    const token = process.env[`PAT_1`];
     const headers =
     {
       Authorization: `token ${token}`,
