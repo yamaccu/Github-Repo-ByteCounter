@@ -1,7 +1,14 @@
 {
   "name": "github-repo-bytecounter",
+  "type": "module",
   "devDependencies": {
-    "axios-mock-adapter": "^1.18.1"
+    "@babel/core": "^7.20.5",
+    "@babel/preset-env": "^7.20.2",
+    "babel-jest": "^29.3.1",
+    "jest": "^29.3.1"
+  },
+  "scripts": {
+    "test": "jest"
   },
   "dependencies": {
     "axios": "^0.24.0",
